@@ -3,6 +3,7 @@ const router = express.Router();
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
 const sendEmail = require('../utils/sendEmail');
+const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 router.use(cookieParser());
 
@@ -20,6 +21,7 @@ const {
   verifyEmail
 } = require('../controllers/authController');
 
+// Authentication middleware
 const protect = async (req, res, next) => {
   try {
     // Get token from cookie
@@ -43,44 +45,8 @@ const User = require('../models/User');
 // Register
 router.post('/register', registerUser);
 
-// Login
-router.post('/login', async (req, res) => {
-  try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(401).json({ message: 'Invalid credentials' });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ message: 'Invalid credentials' });
-    }
-
-    // Generate JWT token
-    const token = jwt.sign(
-      { id: user._id },
-      process.env.JWT_SECRET,
-      { expiresIn: '7d' }
-    );
-
-    // Set token in cookie
-    res.cookie('token', token, cookieOptions);
-
-    // Send response without including the password
-    res.json({
-      success: true,
-      user: {
-        id: user._id,
-        email: user.email,
-        name: user.name
-      }
-    });
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
+// Login route is handled by the imported loginUser function
+router.post('/login', loginUser);
 
 // Email Verification
 router.get('/verify/:token', verifyEmail);

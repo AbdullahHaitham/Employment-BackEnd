@@ -19,28 +19,34 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-
-  isVIP: {
-    type: Boolean,
-    default: false,
+  role: {
+    type: String,
+    enum: ['user', 'company'],
+    required: true
+  },
+  profile: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'UserProfile'
+  },
+  industry: {
+    type: String,
+    default: null
   },
   cv: {
     type: String,
     default: null,
   },
+  isVIP: {
+    type: Boolean,
+    default: false,
+  },
   isVerified: {
     type: Boolean,
     default: false,
   },
-  verificationToken: {
-    type: String,
-  },
-  passwordResetToken: {
-    type: String,
-  },
-  passwordResetExpires: {
-    type: Date,
-  },
+  verificationToken: String,
+  passwordResetToken: String,
+  passwordResetExpires: Date,
   passwordResetVerified: {
     type: Boolean,
     default: false,
@@ -48,14 +54,14 @@ const userSchema = new mongoose.Schema({
   stripeCustomerId: {
     type: String,
     unique: true,
+    sparse: true
+  },
+  // Reference to Company model if role is 'company'
+  companyProfile: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Company',
+    required: function() { return this.role === 'company'; }
   }
-}, {
-  timestamps: true,
 });
-
-// Method to get full name
-userSchema.methods.getFullName = function () {
-  return `${this.firstName} ${this.lastName}`;
-};
 
 module.exports = mongoose.model('User', userSchema);

@@ -4,6 +4,7 @@ const cors = require('cors');
 const connectDB = require('./config/db');
 const path = require('path');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 // Load environment variables
 const envPath = path.join(__dirname, '.env');
@@ -29,6 +30,7 @@ app.use('/api/webhook/stripe', bodyParser.raw({ type: 'application/json' }));
 
 // JSON parser for other routes
 app.use(express.json());
+app.use(cookieParser());
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
@@ -36,10 +38,13 @@ app.use('/api/jobs', require('./routes/jobRoutes'));
 app.use('/api/applications', require('./routes/applicationRoutes'));
 app.use('/api/freelance', require('./routes/freelanceRoutes'));
 app.use('/api/proposals', require('./routes/proposalRoutes'));
+// Removed non-existent jobSeekerRoutes import
+app.use('/api/notifications', require('./routes/notificationRoutes'));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use('/api/vip', require('./routes/vipRoutes'));
 app.use('/api/webhook', require('./routes/webhookRoutes'));
-app.use('/api/payment', require('./routes/paymentRoutes')); 
+app.use('/api/payment', require('./routes/paymentRoutes'));
+app.use('/api/profile', require('./routes/profileRoutes')); 
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
