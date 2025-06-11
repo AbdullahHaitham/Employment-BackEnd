@@ -103,6 +103,7 @@ employment-backend/
 - POST `/api/auth/register` - Register new user
 - POST `/api/auth/login` - User login
 - POST `/api/auth/logout` - User logout
+- POST `/api/auth/verify-email` - Verify user email
 
 ### Profile Management
 - GET `/api/profile` - Get user profile
@@ -112,35 +113,48 @@ employment-backend/
 ### Company Management
 - POST `/api/companies` - Create company
 - GET `/api/companies` - Get all companies
+- GET `/api/companies/:id` - Get company details
 - PUT `/api/companies/:id` - Update company
-  - Query parameters:
-    - `category` - Filter by project category
-    - `budget_range` - Filter by budget range
-- POST `/api/freelance` - Create new freelance project
-  - Required fields:
-    - title
-    - description
-    - budget
-    - category
-  - Response: Created project object with ID
-- GET `/api/freelance/:id` - Get project details
-  - Includes creator information
-  - Includes proposals count
-- PUT `/api/freelance/:id` - Update project
-  - Requires authentication
-  - Only accessible by project creator
-- DELETE `/api/freelance/:id` - Delete project
-  - Requires authentication
-  - Only accessible by project creator
+- DELETE `/api/companies/:id` - Delete company
+- POST `/api/companies/:id/jobs` - Post job for company
+- GET `/api/companies/:id/jobs` - Get company's jobs
 
-### Proposals
-- POST `/api/proposals` - Submit job proposal
-- GET `/api/proposals` - Get proposals for a job
-- PUT `/api/proposals/:id` - Update proposal status
+### Job Management
+- POST `/api/jobs` - Create job posting
+- GET `/api/jobs` - Get all job postings
 
-### Payments
-- POST `/api/payment/create-checkout-session` - Create Stripe checkout session
-- POST `/api/payment/webhook` - Stripe webhook endpoint
+### Freelance Project Management
+- POST `/api/freelance` - Create freelance project
+- GET `/api/freelance` - Get all freelance projects
+
+### Payment & Subscription
+- POST `/api/payment/stripe` - Create Stripe checkout session
+- POST `/api/vip` - Subscribe to VIP plan
+
+### Applications & Proposals
+- POST `/api/applications` - Submit job application
+- POST `/api/proposals` - Submit project proposal
+
+### Notifications
+- POST `/api/notifications` - Create notification
+- GET `/api/notifications` - Get user notifications
+
+### Webhook Integration
+- POST `/api/webhook/stripe` - Handle Stripe webhook events
+- POST `/api/webhook/sendgrid` - Handle SendGrid webhook events
+
+### Documentation Notes
+
+- All endpoints except `/api/auth/register` and `/api/auth/login` require authentication
+- Use `Bearer` token in Authorization header for authenticated requests
+- Response format is consistent across endpoints:
+  - Success: `{ status: 'success', data: {...} }`
+  - Error: `{ status: 'error', message: 'Error message' }`
+
+### API Versioning
+- Current version: v1
+- Base URL: `https://your-domain.com/api/v1/` (in production)
+- Local development: `http://localhost:5000/api/v1/`
 
 ### VIP Features
 - POST `/api/vip` - Subscribe to VIP plan
