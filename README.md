@@ -79,8 +79,12 @@ employment-backend/
 │   ├── User.js
 │   ├── Company.js
 │   ├── UserProfile.js
+│   ├── Job.js
+│   ├── FreelanceProject.js
+│   ├── Application.js
+│   ├── Proposal.js
 │   ├── Notification.js
-│   └── ...other models
+│   └── VIPSubscription.js
 ├── routes/          # API routes
 │   ├── authRoutes.js
 │   ├── profileRoutes.js
