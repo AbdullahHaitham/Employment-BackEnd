@@ -1,35 +1,96 @@
-# Employment Website Backend Documentation
+# Employment Backend
 
-## Project Overview
-This is the backend server for an employment website that connects employers with job seekers and freelancers. The system provides comprehensive features including:
-- Job posting and management
-- Freelance project management
-- User authentication and authorization
-- Payment processing
-- CV upload and management
-- Email notifications
-- VIP subscription plans
-- Secure webhook integration
+A full-featured employment management system backend built with Node.js and Express.
+
+## Features
+
+- User Authentication (Signup/Login)
+- Profile Management
+- Job Posting System
+- Company Management
+- Notification System
+- File Upload (CVs, Documents)
+- Payment Integration (Stripe)
 
 ## Tech Stack
-- Node.js/Express.js
-- MongoDB (using Mongoose)
-- JWT for authentication
-- Stripe for payment processing
-- SendGrid for email services
+
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB
+- **Authentication**: JWT
+- **File Upload**: Multer
+- **Email**: Nodemailer with SendGrid
+- **Payment**: Stripe
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- MongoDB
+- Stripe Account
+- SendGrid Account
+
+### Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/AbdullahHaitham/Employment-BackEnd.git
+```
+
+2. Install dependencies:
+```bash
+npm install
+```
+
+3. Set up environment variables:
+Create a `.env` file in the root directory with the following variables:
+```
+PORT=5000
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+STRIPE_SECRET_KEY=your_stripe_secret_key
+SENDGRID_API_KEY=your_sendgrid_api_key
+```
+
+4. Start the server:
+```bash
+# Development mode
+npm run dev
+
+# Production mode
+npm start
+```
 
 ## Project Structure
+
 ```
-employment_backend/
+employment-backend/
 ├── config/           # Configuration files
-├── controllers/      # Business logic
-├── middleware/       # Request/response interceptors
+│   └── multer.js     # File upload configuration
+├── controllers/      # Route controllers
+│   ├── authController.js
+│   ├── profileController.js
+│   ├── companyController.js
+│   ├── notificationController.js
+│   └── ...other controllers
+├── middleware/       # Custom middleware
+│   └── authMiddleware.js
 ├── models/          # Database models
+│   ├── User.js
+│   ├── Company.js
+│   ├── UserProfile.js
+│   ├── Notification.js
+│   └── ...other models
 ├── routes/          # API routes
-├── utils/           # Utility functions
-├── uploads/         # File upload storage
+│   ├── authRoutes.js
+│   ├── profileRoutes.js
+│   ├── companyRoutes.js
+│   ├── notificationRoutes.js
+│   └── ...other routes
+├── uploads/         # Uploaded files storage
+├── utils/          # Utility functions
 ├── server.js        # Main application file
-└── .env            # Environment variables
+└── package.json     # Project dependencies
 ```
 
 ## API Endpoints
@@ -37,35 +98,17 @@ employment_backend/
 ### Authentication
 - POST `/api/auth/register` - Register new user
 - POST `/api/auth/login` - User login
-- POST `/api/auth/forgot-password` - Password reset request
-- POST `/api/auth/reset-password` - Reset password
-- POST `/api/auth/upload-cv` - Upload CV file (stored in uploads folder)
+- POST `/api/auth/logout` - User logout
 
-### Jobs
-- GET `/api/jobs` - List all jobs
-  - Query parameters: 
-    - `category` - Filter by job category
-    - `location` - Filter by location
-    - `salary_range` - Filter by salary range
-- POST `/api/jobs` - Create new job posting
-  - Required fields:
-    - title
-    - description
-    - company
-    - location
-    - salary
-  - Response: Created job object with ID
-- GET `/api/jobs/:id` - Get job details
-  - Includes creator information
-- PUT `/api/jobs/:id` - Update job posting
-  - Requires authentication
-  - Only accessible by job creator
-- DELETE `/api/jobs/:id` - Delete job posting
-  - Requires authentication
-  - Only accessible by job creator
+### Profile Management
+- GET `/api/profile` - Get user profile
+- PUT `/api/profile` - Update profile
+- POST `/api/profile/upload-cv` - Upload CV
 
-### Freelance Projects
-- GET `/api/freelance` - List all freelance projects
+### Company Management
+- POST `/api/companies` - Create company
+- GET `/api/companies` - Get all companies
+- PUT `/api/companies/:id` - Update company
   - Query parameters:
     - `category` - Filter by project category
     - `budget_range` - Filter by budget range
