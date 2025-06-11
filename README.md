@@ -21,6 +21,84 @@ A full-featured employment management system backend built with Node.js and Expr
 - **Email**: Nodemailer with SendGrid
 - **Payment**: Stripe
 
+## Database Schema
+
+### User Profile Schema
+```javascript
+UserProfile {
+  user: {
+    type: ObjectId,
+    ref: 'User',
+    required: true,
+    unique: true
+  },
+  headingLine: String,
+  summary: String,
+  skills: [String],
+  languages: [String],
+  experience: [{
+    title: String,
+    company: String,
+    startDate: Date,
+    endDate: Date,
+    description: String
+  }],
+  education: [{
+    institution: String,
+    degree: String,
+    fieldOfStudy: String,
+    startDate: Date,
+    endDate: Date
+  }],
+  cv: {
+    filename: String,
+    path: String,
+    uploadDate: Date
+  }
+}
+```
+
+### Company Profile Schema
+```javascript
+Company {
+  user: {
+    type: ObjectId,
+    ref: 'User',
+    required: true
+  },
+  companyName: String,
+  registrationNumber: String,
+  taxCard: String,
+  description: String,
+  website: String,
+  logo: {
+    filename: String,
+    path: String,
+    uploadDate: Date
+  },
+  address: {
+    street: String,
+    city: String,
+    state: String,
+    zipCode: String,
+    country: String
+  },
+  contact: {
+    email: String,
+    phone: String,
+    socialLinks: {
+      linkedin: String,
+      twitter: String,
+      facebook: String
+    }
+  },
+  jobs: [{
+    type: ObjectId,
+    ref: 'Job'
+  }]
+}
+```
+
 ## Getting Started
 
 ### Prerequisites
